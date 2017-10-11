@@ -101,11 +101,13 @@ CPARAM i_gain = { 0, 999, I_GAIN_DEFAULT, I_GAIN_DEFAULT, 4, 5 };
 CPARAM d_gain = { 0, 999, D_GAIN_DEFAULT, D_GAIN_DEFAULT, 6, 7 };
 CPARAM i_thresh = { 0, 100, I_THRESH_DEFAULT, I_THRESH_DEFAULT, 8, 9 };
 CPARAM temp_offset_corr = { -100, 100, TEMP_OFFSET_CORR_DEFAULT, TEMP_OFFSET_CORR_DEFAULT, 10, 11 };
+CPARAM temp_gain_corr = {100, 999, TEMP_GAIN_DEFAULT, TEMP_GAIN_DEFAULT, 30, 31};
 CPARAM temp_setpoint = { 50, 500, TEMP_SETPOINT_DEFAULT, TEMP_SETPOINT_DEFAULT, 12, 13 };
 CPARAM temp_averages = { 100, 999, TEMP_AVERAGES_DEFAULT, TEMP_AVERAGES_DEFAULT, 14, 15 };
 CPARAM slp_timeout = { 0, 30, SLP_TIMEOUT_DEFAULT, SLP_TIMEOUT_DEFAULT, 16, 17 };
 CPARAM fan_only = { 0, 1, 0, 0, 26, 27 };
 CPARAM display_adc_raw = { 0, 1, 0, 0, 28, 29 };
+
 
 #ifdef CURRENT_SENSE_MOD
 CPARAM fan_current_min = { 0, 999, FAN_CURRENT_MIN_DEFAULT, FAN_CURRENT_MIN_DEFAULT, 22, 23 };
@@ -194,7 +196,7 @@ int main(void)
 
 		uint16_t adc_raw = analogRead(A0);	// need raw value later, store it here and avoid 2nd ADC read
 
-		temp_inst = adc_raw + temp_offset_corr.value;	// approx. temp in °C
+		temp_inst = (adc_raw / (temp_gain_corr.value / 100) ) + temp_offset_corr.value;	// approx. temp in °C
 
 		if (temp_inst < 0) {
 			temp_inst = 0;
@@ -316,6 +318,7 @@ int main(void)
 				change_config_parameter(&d_gain, "D");
 				change_config_parameter(&i_thresh, "ITH");
 				change_config_parameter(&temp_offset_corr, "TOF");
+				change_config_parameter(&temp_gain_corr, "TGN");
 				change_config_parameter(&temp_averages, "AVG");
 				change_config_parameter(&slp_timeout, "SLP");
 				change_config_parameter(&display_adc_raw, "ADC");
@@ -484,6 +487,7 @@ void setup_858D(void)
 	eep_load(&d_gain);
 	eep_load(&i_thresh);
 	eep_load(&temp_offset_corr);
+	eep_load(&temp_gain_corr);
 	eep_load(&temp_setpoint);
 	eep_load(&temp_averages);
 	eep_load(&slp_timeout);
@@ -603,6 +607,7 @@ void restore_default_conf(void)
 	d_gain.value = d_gain.value_default;
 	i_thresh.value = i_thresh.value_default;
 	temp_offset_corr.value = temp_offset_corr.value_default;
+	temp_gain_corr.value = temp_gain_corr.value_default;
 	temp_setpoint.value = temp_setpoint.value_default;
 	temp_averages.value = temp_averages.value_default;
 	slp_timeout.value = slp_timeout.value_default;
@@ -621,6 +626,7 @@ void restore_default_conf(void)
 	eep_save(&d_gain);
 	eep_save(&i_thresh);
 	eep_save(&temp_offset_corr);
+	eep_save(&temp_gain_corr);
 	eep_save(&temp_setpoint);
 	eep_save(&temp_averages);
 	eep_save(&slp_timeout);
