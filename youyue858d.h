@@ -120,6 +120,8 @@ uint8_t get_key_common_l(uint8_t key_mask);
 #define D_GAIN_SCALING 25.0
 
 #define TEMP_OFFSET_CORR_DEFAULT 33
+#define TEMP_GAIN_DEFAULT 100
+
 #define TEMP_SETPOINT_DEFAULT 75
 
 #define TEMP_AVERAGES_DEFAULT 250L
@@ -137,8 +139,8 @@ uint8_t get_key_common_l(uint8_t key_mask);
 // Continue reading below...
 //
 
-#define FAN_SPEED_MIN_DEFAULT 150UL
-#define FAN_SPEED_MAX_DEFAULT 360UL
+#define FAN_SPEED_MIN_DEFAULT 130UL
+#define FAN_SPEED_MAX_DEFAULT 400UL
 
 // 
 // Good starting values with BLDC FAN-speed mod
