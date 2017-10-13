@@ -1,3 +1,8 @@
+// TODO: merge rol_string´and display_string_running() into one single, nonblocking function
+// TODO: avoid flickering while cooling down
+// TODO: set the dot for temp_gain_correction (tgc) correctly (2.40 instead of 240)
+
+
 /*
  * This is a custom firmware for my 'Youyue 858D+' hot-air soldering station.
  * It may or may not be useful to you, always double check if you use it.
@@ -915,7 +920,8 @@ void display_string(const char *string)
   * This function displays a running string on the 7-segment display.
   * It reads out and displays every character until a '\0' is reached.
   * CAUTION! Always be sure that your string is null-terminated
-  *
+  * CAUTION! This functions is blocking...
+  * 
   * The standard delay is 500ms
   *
   * \param[in] *string     pointer to the c-string to display
@@ -940,17 +946,38 @@ void display_string_running(const char* string)
 }
 
 
+/*
+ * ROTATES THE CSTRING
+ * to the left by 1
+ */
+void rol_string(char* text){
+	
+	int len = strlen(text);
+	char tmp = text[0];
+	
+	for(int i = 0; i <= len-2; i++){
+		text[i] = text[i+1];
+	}
+	
+	text[len-1] = tmp;
+}
+
+
+
+
 void fan_test(void)
 {
 	HEATER_OFF;
 
 	// if the wand is not in the cradle when powered up, go into a safe mode
 	// and display an error
+
+ 	char displaytext[] = "CRADLE ";
+
 	while (!REEDSW_CLOSED) {
-		display_string_running("CRADLE");
-		delay(2000);
-		clear_display();
-		delay(1000);
+ 		display_string(displaytext);
+		rol_string(displaytext);
+		delay(500);
 	}
 
 FAN_ON;
