@@ -222,7 +222,7 @@ int main(void)
 
 		uint16_t adc_raw = analogRead(A0);	// need raw value later, store it here and avoid 2nd ADC read
 
-		temp_inst = ((adc_raw * 100) / temp_gain_corr.value ) + temp_offset_corr.value;	// approx. temp in °C
+		temp_inst = (adc_raw / (temp_gain_corr.value / 100)) + temp_offset_corr.value;	// approx. temp in °C
 
 		if (temp_inst < 0) {
 			temp_inst = 0;
