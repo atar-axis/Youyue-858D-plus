@@ -2,8 +2,9 @@
  * This is a custom firmware for my 'Youyue 858D+' hot-air soldering station.
  * It may or may not be useful to you, always double check if you use it.
  *
- * V1.46
+ * V1.47
  *
+ * 2017    - Florian Dollinger
  * 2015/16 - Robert Spitzenpfeil
  * 2015    - Moritz Augsburger
  *
@@ -58,7 +59,7 @@
 
 #define FW_MAJOR_V 1
 #define FW_MINOR_V_A 4
-#define FW_MINOR_V_B 6
+#define FW_MINOR_V_B 7
 /*
  * PC5: FAN-speed (A5 in Arduino lingo) (OK)
  * PC3: TIP122.base --> FAN (OK)
@@ -93,22 +94,32 @@
 #include <EEPROM.h>
 #include "youyue858d.h"
 
+// FRAMEBUFFERS
+//-----------------------------------------------
+// Contain the values to be displayed next
+
+// fb is the "raw" data which is directly displayed by the timer-ISR
 uint8_t fb[3] = { 0xFF, 0xFF, 0xFF };	// dig0, dig1, dig2
+	
+// framebuffer is a bit more structured needs and fb_update() to be stored in fb
 framebuffer_t framebuffer = { 0x00, 0x00, 0x00, 0, 0, 0, 0 };
 
-CPARAM p_gain = { 0, 999, P_GAIN_DEFAULT, P_GAIN_DEFAULT, 2, 3 };	// min, max, default, value, eep_addr_high, eep_addr_low
+
+// PARAMETERS
+//-----------------------------------------------
+// min, max, default, value, eep_addr_high, eep_addr_low
+
+CPARAM p_gain = { 0, 999, P_GAIN_DEFAULT, P_GAIN_DEFAULT, 2, 3 };
 CPARAM i_gain = { 0, 999, I_GAIN_DEFAULT, I_GAIN_DEFAULT, 4, 5 };
 CPARAM d_gain = { 0, 999, D_GAIN_DEFAULT, D_GAIN_DEFAULT, 6, 7 };
 CPARAM i_thresh = { 0, 100, I_THRESH_DEFAULT, I_THRESH_DEFAULT, 8, 9 };
 CPARAM temp_offset_corr = { -100, 100, TEMP_OFFSET_CORR_DEFAULT, TEMP_OFFSET_CORR_DEFAULT, 10, 11 };
-CPARAM temp_gain_corr = {100, 999, TEMP_GAIN_DEFAULT, TEMP_GAIN_DEFAULT, 30, 31};
+CPARAM temp_gain_corr = { 100, 999, TEMP_GAIN_DEFAULT, TEMP_GAIN_DEFAULT, 30, 31 };
 CPARAM temp_setpoint = { 50, 500, TEMP_SETPOINT_DEFAULT, TEMP_SETPOINT_DEFAULT, 12, 13 };
 CPARAM temp_averages = { 100, 999, TEMP_AVERAGES_DEFAULT, TEMP_AVERAGES_DEFAULT, 14, 15 };
 CPARAM slp_timeout = { 0, 30, SLP_TIMEOUT_DEFAULT, SLP_TIMEOUT_DEFAULT, 16, 17 };
 CPARAM fan_only = { 0, 1, 0, 0, 26, 27 };
 CPARAM display_adc_raw = { 0, 1, 0, 0, 28, 29 };
-
-
 #ifdef CURRENT_SENSE_MOD
 CPARAM fan_current_min = { 0, 999, FAN_CURRENT_MIN_DEFAULT, FAN_CURRENT_MIN_DEFAULT, 22, 23 };
 CPARAM fan_current_max = { 0, 999, FAN_CURRENT_MAX_DEFAULT, FAN_CURRENT_MAX_DEFAULT, 24, 25 };
@@ -121,16 +132,24 @@ CPARAM fan_speed_min = { 120, 180, FAN_SPEED_MIN_DEFAULT, FAN_SPEED_MIN_DEFAULT,
 CPARAM fan_speed_max = { 300, 400, FAN_SPEED_MAX_DEFAULT, FAN_SPEED_MAX_DEFAULT, 20, 21 };
 #endif
 
+// KEY STATE
+//-----------------------------------------------
+
 volatile uint8_t key_state;	// debounced and inverted key state: bit = 1: key pressed
 volatile uint8_t key_press;	// key press detect
 volatile uint8_t key_rpt;	// key long press and repeat
 
+
 volatile uint8_t display_blink;
+
+
+//////////////////////////////////////////////////////////////////////////
+// MAIN
+//////////////////////////////////////////////////////////////////////////
 
 int main(void)
 {
 	init();			// make sure the Arduino-specific stuff is up and running (timers... see 'wiring.c')
-
 	setup_858D();
 
 #ifdef DISPLAY_MCUSR
@@ -159,7 +178,9 @@ int main(void)
 #endif
 
 	show_firmware_version();
+#ifdef USE_WATCHDOG
 	test_F_CPU_with_watchdog();
+#endif
 	fan_test();
 
 #ifdef USE_WATCHDOG
@@ -196,7 +217,7 @@ int main(void)
 
 		uint16_t adc_raw = analogRead(A0);	// need raw value later, store it here and avoid 2nd ADC read
 
-		temp_inst = (adc_raw / (temp_gain_corr.value / 100) ) + temp_offset_corr.value;	// approx. temp in °C
+		temp_inst = ((adc_raw * 100) / temp_gain_corr.value ) + temp_offset_corr.value;	// approx. temp in °C
 
 		if (temp_inst < 0) {
 			temp_inst = 0;
@@ -274,19 +295,32 @@ int main(void)
 		} else if (REEDSW_OPEN) {
 			FAN_ON;
 		}
-		// menu key handling
+		
+		
+		
+		/////////////////////////////////
+		// MENU KEY HANDLING
+		/////////////////////////////////
+		
+		// CHANGING THE TEMPERATURE
+		
+		// - INCREASE BY 1
 		if (get_key_short(1 << KEY_UP)) {
 			button_input_time = millis();
 			if (temp_setpoint.value < temp_setpoint.value_max) {
 				temp_setpoint.value++;
 			}
 			temp_setpoint_saved = 0;
+			
+		// - DECREASE BY 1
 		} else if (get_key_short(1 << KEY_DOWN)) {
 			button_input_time = millis();
 			if (temp_setpoint.value > temp_setpoint.value_min) {
 				temp_setpoint.value--;
 			}
 			temp_setpoint_saved = 0;
+			
+		// - INCREASE BY 10
 		} else if (get_key_long_r(1 << KEY_UP) || get_key_rpt_l(1 << KEY_UP)) {
 			button_input_time = millis();
 			if (temp_setpoint.value < (temp_setpoint.value_max - 10)) {
@@ -295,7 +329,8 @@ int main(void)
 				temp_setpoint.value = temp_setpoint.value_max;
 			}
 			temp_setpoint_saved = 0;
-
+			
+		// - DECREASE BY 10
 		} else if (get_key_long_r(1 << KEY_DOWN) || get_key_rpt_l(1 << KEY_DOWN)) {
 			button_input_time = millis();
 
@@ -306,6 +341,8 @@ int main(void)
 			}
 
 			temp_setpoint_saved = 0;
+			
+		// ENTER THE MENU
 		} else if (get_key_common_l(1 << KEY_UP | 1 << KEY_DOWN)) {
 			HEATER_OFF;	// security reasons, delay below!
 #ifdef USE_WATCHDOG
@@ -329,6 +366,9 @@ int main(void)
 				change_config_parameter(&fan_speed_min, "FSL");
 				change_config_parameter(&fan_speed_max, "FSH");
 #endif
+
+			// FAN ONLY MODE
+			// This mode is entered only at setup_858D() below
 			} else {
 				get_key_press(1 << KEY_UP | 1 << KEY_DOWN);	// clear inp state
 				fan_only.value ^= 0x01;
@@ -342,7 +382,12 @@ int main(void)
 			watchdog_on();
 #endif
 		}
-		// security first!
+		
+		
+		/////////////////////////////////
+		// TEMPERATURE SECURITY
+		/////////////////////////////////
+		
 		if (temp_average >= MAX_TEMP_ERR) {
 			// something might have gone terribly wrong
 			HEATER_OFF;
@@ -369,7 +414,12 @@ int main(void)
 				delay(1000);
 			}
 		}
-		// display output
+		
+		
+		/////////////////////////////////
+		// DISPLAY OUTPUT
+		/////////////////////////////////
+		
 		if ((millis() - button_input_time) < SHOW_SETPOINT_TIMEOUT) {
 			if (display_blink < 5) {
 				clear_display();
@@ -514,29 +564,6 @@ void clear_display(void)
 	fb_update();
 }
 
-void display_string(const char *string)
-{
-	framebuffer.digit[0] = 255;
-	framebuffer.digit[1] = 255;
-	framebuffer.digit[2] = 255;
-	framebuffer.dot[0] = 0;
-	framebuffer.dot[1] = 0;
-	framebuffer.dot[2] = 0;
-
-	uint8_t ctr;
-
-	for (ctr = 0; ctr <= 2; ctr++) {
-		// read the first 3 characters of the string
-		if (string[ctr] == '\0') {
-			break;
-		} else {
-			framebuffer.digit[2 - ctr] = string[ctr];
-		}
-	}
-	framebuffer.changed = 1;
-	fb_update();
-}
-
 void change_config_parameter(CPARAM * param, const char *string)
 {
 	display_string(string);
@@ -669,6 +696,19 @@ void clear_eeprom_saved_dot(void)
 	fb_update();
 }
 
+
+
+ /**
+  * \brief display a number.
+  *
+  * This function displays a number on the 7-segment display.
+  * Related functions:
+  * display_char()
+  * display_string()
+  *
+  * \param[in] number     number to display (negative numbers => underflow on the display)
+  * \return    void
+  */
 void display_number(int16_t number)
 {
 	if (number < 0) {
@@ -691,21 +731,51 @@ void display_number(int16_t number)
 	fb_update();
 }
 
+
+ /**
+  * \brief display a character.
+  *
+  * This function displays a character at a given position on the 7-segment display.
+  *
+  * \param[in] digit     position (0-2)
+  * \param[in] character character to display (e.g. 'A' or '1')
+  * \param[in] dot       if > 0: activate the dot behind the given position
+  * \return    void
+  */
 void display_char(uint8_t digit, uint8_t character, uint8_t dot)
 {
 	uint8_t portout = 0xFF;
-
+	
+	// 8 Bit
+	// -> '0'-Bit: active
+	// -> '1'-Bit: not active
+	
+	//  0b0000_0000
+	//	  |||| |||'--- top
+	//    |||| ||'---- bottom-left
+	//    |||| |'----- bottom
+	//    |||| '------ top-left
+	//    |||'-------- dot (on the right side of the segment)
+	//    ||'--------- bottom-right
+	//    |'---------- middle
+	//    '----------- top-right
+	
+	
 	switch (character) {
 	case 0:
+		// ~0b‭1010_1111‬ = 0b0101_0000
 		portout = (uint8_t) (~0xAF);	// activate segments for displaying a '0'
 		break;
 	case 1:
+		// ~0b‭1010_0000‬ = 0b0101_1111
 		portout = (uint8_t) (~0xA0);	// '1'
 		break;
 	case 2:
+		// ~0b‭1100_0111‬ = 0b0011_1000
 		portout = (uint8_t) (~0xC7);	// '2'
 		break;
 	case 3:
+		// ~0b‭1110_0101‬ = 0b0001_1010
 		portout = (uint8_t) (~0xE5);	// '3'
 		break;
 	case 4:
@@ -718,6 +788,7 @@ void display_char(uint8_t digit, uint8_t character, uint8_t dot)
 		portout = (uint8_t) (~0x6F);	// '6'
 		break;
 	case 7:
+		// ~0b‭10100001‬ = 0b01011110
 		portout = (uint8_t) (~0xA1);	// '7'
 		break;
 	case 8:
@@ -730,10 +801,14 @@ void display_char(uint8_t digit, uint8_t character, uint8_t dot)
 		portout = (uint8_t) (~0x40);	// '-'
 		break;
 	case '.':
+		// ~0b0001_0000 = 0b1110_1111
 		portout = (uint8_t) (~0x10);	// '.'
 		break;
 	case 'A':
 		portout = (uint8_t) (~0xEB);	// 'A'
+		break;
+	case 'B':
+		portout = (uint8_t) (~0x6E);	// 'b'
 		break;
 	case 'C':
 		portout = (uint8_t) (~0x0F);	// 'C'
@@ -786,8 +861,9 @@ void display_char(uint8_t digit, uint8_t character, uint8_t dot)
 	case '*':
 		portout = (uint8_t) (~0xC9);	// '°'
 		break;
+	case ' ':
 	case 255:
-		portout = (uint8_t) (0xFF);	// segments OFF
+		portout = (uint8_t) (0xFF);		// segments OFF
 		break;
 	default:
 		portout = (uint8_t) (~0x10);	// '.'
@@ -800,6 +876,70 @@ void display_char(uint8_t digit, uint8_t character, uint8_t dot)
 	fb[digit] = portout;
 }
 
+
+ /**
+  * \brief display a string.
+  *
+  * This function displays a string on the 7-segment display.
+  * It reads only the first three characters.
+  *
+  * \param[in] *string     pointer to the string to display
+  * \return    void
+  */
+void display_string(const char *string)
+{
+	framebuffer.digit[0] = 255;
+	framebuffer.digit[1] = 255;
+	framebuffer.digit[2] = 255;
+	framebuffer.dot[0] = 0;
+	framebuffer.dot[1] = 0;
+	framebuffer.dot[2] = 0;
+
+	uint8_t ctr;
+
+	for (ctr = 0; ctr <= 2; ctr++) {
+		// read the first 3 characters of the string
+		if (string[ctr] == '\0') {
+			break;
+			} else {
+			framebuffer.digit[2 - ctr] = string[ctr];
+		}
+	}
+	framebuffer.changed = 1;
+	fb_update();
+}
+
+ /**
+  * \brief display a string.
+  *
+  * This function displays a running string on the 7-segment display.
+  * It reads out and displays every character until a '\0' is reached.
+  * CAUTION! Always be sure that your string is null-terminated
+  *
+  * The standard delay is 500ms
+  *
+  * \param[in] *string     pointer to the c-string to display
+  * \return    void
+  */
+void display_string_running(const char* string)
+{
+	// empty string, return
+	if(string[0] == '\0')
+		return;
+		
+	// string isn't long enough for "running", hence display normally
+	if(string[1] == '\0' | string[2] == '\0' | string[3] == '\0')
+		display_string(string);
+	
+	// if you get here, the string seems to be ok	
+	for(uint8_t i = 0; string[i+2] != '\0'; i++){
+		display_string(&string[i]);
+		delay(500);
+	}
+	
+}
+
+
 void fan_test(void)
 {
 	HEATER_OFF;
@@ -807,38 +947,31 @@ void fan_test(void)
 	// if the wand is not in the cradle when powered up, go into a safe mode
 	// and display an error
 	while (!REEDSW_CLOSED) {
-		display_string("CRA");
-		delay(1000);
-		display_string("DLE");
+		display_string_running("CRADLE");
 		delay(2000);
 		clear_display();
 		delay(1000);
 	}
 
+FAN_ON;
+delay(3000);
 #ifdef CURRENT_SENSE_MOD
-	uint16_t fan_current;
-	FAN_ON;
-	delay(3000);
-	fan_current = analogRead(A2);
+	uint16_t fan_current = analogRead(A2);
 
 	if ((fan_current < (uint16_t) (fan_current_min.value)) || (fan_current > (uint16_t) (fan_current_max.value))) {
 #else				//CURRENT_SENSE_MOD
-	uint16_t fan_speed;
-	FAN_ON;
-	delay(3000);
-	fan_speed = analogRead(A5);
+	uint16_t fan_speed = analogRead(A5);
 
 	if ((fan_speed < (uint16_t) (fan_speed_min.value)) || (fan_speed > (uint16_t) (fan_speed_max.value))) {
 #endif				//CURRENT_SENSE_MOD
+
 		// the fan is not working as it should
 		FAN_OFF;
 		while (1) {
-			display_string("FAN");
-			delay(1000);
 #ifdef CURRENT_SENSE_MOD
-			display_string("CUR");
+			display_string_running("FANCUR");
 #else				//CURRENT_SENSE_MOD
-			display_string("SPD");
+			display_string_running("FANSPD");
 #endif				//CURRENT_SENSE_MOD
 			delay(2000);
 			clear_display();
