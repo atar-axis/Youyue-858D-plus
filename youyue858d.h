@@ -130,9 +130,13 @@ uint8_t get_key_common_l(uint8_t key_mask);
 #define MAX_TEMP_ERR 550L
 #define SAFE_TO_TOUCH_TEMP 40
 
-#define FAN_OFF_TEMP 45
 #define FAN_ON_TEMP 60
+#define FAN_OFF_TEMP 45
 #define FAN_OFF_TEMP_FANONLY (SAFE_TO_TOUCH_TEMP - 2)
+
+#define FAN_OFF_TEMP_DELAY_SEC 15
+#define FAN_OFF_TEMP_DELAY_MILLI (FAN_OFF_TEMP_DELAY_SEC * 1000)
+
 
 //
 // Comment out the following 2 #defines, if you want to use the FAN-speed mod (HW changes required)
