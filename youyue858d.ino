@@ -1,6 +1,6 @@
 // TODO: merge rol_string´and display_string_running() into one single, nonblocking function
 // TODO: avoid flickering while cooling down
-// TODO: set the dot for temp_gain_correction (tgc) correctly (2.40 instead of 240)
+// TODO: show the dot for temp_gain_correction (tgc) (2.40 instead of 240)
 
 
 /*
@@ -197,7 +197,9 @@ int main(void)
 	Serial.println("\nRESET");
 #endif
 
+
 	while (1) {
+		
 #ifdef DEBUG
 		int32_t start_time = micros();
 #endif
@@ -219,8 +221,19 @@ int main(void)
 		static int32_t temp_setpoint_saved_time = 0;
 
 		static uint32_t heater_start_time = 0;
+		
+		static uint32_t temp_low_fanonly_firstTime = 0;
+		static uint32_t temp_low_firstTime = 0;
+				
+		static bool temp_low_fanonly_firstEvent = 1;
+		static bool temp_low_firstEvent = 1;
+		
+		static bool fan_off_allowed = 0;
+		static bool was_hot_before = 0;
+		
 
 		uint16_t adc_raw = analogRead(A0);	// need raw value later, store it here and avoid 2nd ADC read
+		
 
 		temp_inst = (adc_raw / (temp_gain_corr.value / 100)) + temp_offset_corr.value;	// approx. temp in °C
 
@@ -232,8 +245,10 @@ int main(void)
 			HEATER_OFF;
 			heater_start_time = millis();
 			clear_dot();
-		} else if (REEDSW_OPEN && (temp_setpoint.value >= temp_setpoint.value_min)
-			   && (temp_average < MAX_TEMP_ERR) && ((millis() - heater_start_time) < ((uint32_t) (slp_timeout.value) * 60 * 1000))) {
+		} else if (REEDSW_OPEN
+					&& (temp_setpoint.value >= temp_setpoint.value_min)
+					&& (temp_average < MAX_TEMP_ERR)
+					&& ((millis() - heater_start_time) < ((uint32_t) (slp_timeout.value) * 60 * 1000))) {
 
 			FAN_ON;
 
@@ -290,13 +305,59 @@ int main(void)
 			temp_accu = 0;
 			temp_avg_ctr = 0;
 		}
-		// fan/cradle handling
+		
+		
+		/////////////////////////////////
+		// FAN CRADLE HANDLING
+		/////////////////////////////////
+		//
+		// TODO: On the second run the fan switches off immediately, why?
+		
+
+		if(temp_average <= FAN_OFF_TEMP){
+
+			// Nur im ersten Druchlauf nach einer heißen Phase:
+			// Zeit merken zu der dieser Zustand zum ersten Mal erreicht wurde
+			
+			if(was_hot_before && temp_low_firstEvent){
+				temp_low_firstTime = millis();
+				temp_low_firstEvent = 0;
+			}
+			
+			// In weiteren Durchläufen:
+			// Vergangene Zeit berechnen seit erreichen dieses Events
+			// Sofern die Zeit >= FAN_OFF_TEMP_DELAY_MILLI
+			//   Erlaubnis zum Abschalten des Lüfters geben
+			
+			if(!temp_low_firstEvent){
+				
+				if((millis() - temp_low_firstTime) >= FAN_OFF_TEMP_DELAY_MILLI)
+					fan_off_allowed = 1;
+			}
+				
+		} else {
+			
+			// reset variables
+			was_hot_before = 1;
+			temp_low_firstEvent = 1;
+			
+			fan_off_allowed = 0;
+			
+		}
+		
+
 		if (temp_average >= FAN_ON_TEMP) {
+			
 			FAN_ON;
+			
 		} else if (REEDSW_CLOSED && fan_only.value == 1 && (temp_average <= FAN_OFF_TEMP_FANONLY)) {
-			FAN_OFF;
+			
+			//FAN_OFF;
+						
 		} else if (REEDSW_CLOSED && fan_only.value == 0 && (temp_average <= FAN_OFF_TEMP)) {
-			FAN_OFF;
+			
+			if(fan_off_allowed)	FAN_OFF;
+			
 		} else if (REEDSW_OPEN) {
 			FAN_ON;
 		}
