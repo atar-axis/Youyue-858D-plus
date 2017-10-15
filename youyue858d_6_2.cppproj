@@ -2,7 +2,7 @@
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectVersion>7.0</ProjectVersion>
+    <ProjectVersion>6.2</ProjectVersion>
     <ToolchainName>com.Atmel.AVRGCC8.CPP</ToolchainName>
     <ProjectGuid>{646f9cc9-d113-4362-8561-6f553704dbbb}</ProjectGuid>
     <avrdevice>atmega328p</avrdevice>
@@ -27,16 +27,16 @@
     <BootSegment>0</BootSegment>
     <preserveEEPROM>true</preserveEEPROM>
     <AsfFrameworkConfig>
-      <framework-data>
-  <options />
-  <configurations />
-  <files />
-  <documentation help="" />
-  <offline-documentation help="" />
-  <dependencies>
-    <content-extension eid="atmel.asf" uuidref="Atmel.ASF" version="3.25.0" />
-  </dependencies>
-</framework-data>
+      <framework-data xmlns="">
+        <options />
+        <configurations />
+        <files />
+        <documentation help="" />
+        <offline-documentation help="" />
+        <dependencies>
+          <content-extension eid="atmel.asf" uuidref="Atmel.ASF" version="3.24.2" />
+        </dependencies>
+      </framework-data>
     </AsfFrameworkConfig>
     <avrtool>com.atmel.avrdbg.tool.atmelice</avrtool>
     <avrtoolinterface>ISP</avrtoolinterface>
@@ -77,7 +77,7 @@
     <ListValues>
       <Value>__AVR_ATmega328p__</Value>
       <Value>__AVR_ATmega328P__</Value>
-      <Value>ARDUINO=10608</Value>
+      <Value>ARDUINO=165</Value>
       <Value>ARDUINO_MAIN</Value>
       <Value>F_CPU=8000000L</Value>
       <Value>__AVR__</Value>
@@ -87,18 +87,18 @@
   </avrgcc.compiler.symbols.DefSymbols>
   <avrgcc.compiler.directories.IncludePaths>
     <ListValues>
-      <Value>../../../remote</Value>
-      <Value>C:/Users/flo/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.20/libraries/EEPROM/src</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/tools/avr/lib/gcc/avr/4.8.1/include</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/tools/avr//avr/include/avr/</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/tools/avr/avr/include/</Value>
+      <Value>C:/Users/mo/Documents/Arduino/libraries</Value>
+      <Value>C:/Program Files (x86)/Visual Micro/Visual Micro for Arduino/Micro Platforms/default/debuggers</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries</Value>
       <Value>C:/Program Files (x86)/Arduino/libraries</Value>
-      <Value>C:/Users/flo/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.20/libraries</Value>
-      <Value>C:/Users/flo/Documents/Arduino/libraries</Value>
-      <Value>C:/Users/flo/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.20/cores/arduino</Value>
-      <Value>C:/Users/flo/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.20/variants/standard</Value>
-      <Value>C:/Users/flo/AppData/Local/arduino15/packages/arduino/tools/avr-gcc/4.9.2-atmel3.5.4-arduino2/avr/include/</Value>
-      <Value>C:/Users/flo/AppData/Local/arduino15/packages/arduino/tools/avr-gcc/4.9.2-atmel3.5.4-arduino2/avr/include/avr/</Value>
-      <Value>C:/Users/flo/AppData/Local/arduino15/packages/arduino/tools/avr-gcc/4.9.2-atmel3.5.4-arduino2/lib/gcc/avr/4.8.1/include</Value>
-      <Value>C:/Users/flo/AppData/Local/arduino15/packages/arduino/tools/avr-gcc/4.9.2-atmel3.5.4-arduino2/lib/gcc/avr/4.9.2/include</Value>
-      <Value>C:/Users/flo/AppData/Local/arduino15/packages/arduino/tools/avr-gcc/4.9.2-atmel3.5.4-arduino2/lib/gcc/avr/4.9.3/include</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries/EEPROM/utility</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries/EEPROM</Value>
+      <Value>../../Youyue-858D-plus</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/arduino/avr/variants/standard</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/arduino/avr/cores/arduino</Value>
     </ListValues>
   </avrgcc.compiler.directories.IncludePaths>
   <avrgcc.compiler.optimization.level>Optimize (-O1)</avrgcc.compiler.optimization.level>
@@ -112,7 +112,7 @@
     <ListValues>
       <Value>__AVR_ATmega328p__</Value>
       <Value>__AVR_ATmega328P__</Value>
-      <Value>ARDUINO=10608</Value>
+      <Value>ARDUINO=165</Value>
       <Value>ARDUINO_MAIN</Value>
       <Value>F_CPU=8000000L</Value>
       <Value>__AVR__</Value>
@@ -122,18 +122,18 @@
   </avrgcccpp.compiler.symbols.DefSymbols>
   <avrgcccpp.compiler.directories.IncludePaths>
     <ListValues>
-      <Value>../../../remote</Value>
-      <Value>C:/Users/flo/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.20/libraries/EEPROM/src</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/tools/avr/lib/gcc/avr/4.8.1/include</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/tools/avr//avr/include/avr/</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/tools/avr/avr/include/</Value>
+      <Value>C:/Users/mo/Documents/Arduino/libraries</Value>
+      <Value>C:/Program Files (x86)/Visual Micro/Visual Micro for Arduino/Micro Platforms/default/debuggers</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries</Value>
       <Value>C:/Program Files (x86)/Arduino/libraries</Value>
-      <Value>C:/Users/flo/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.20/libraries</Value>
-      <Value>C:/Users/flo/Documents/Arduino/libraries</Value>
-      <Value>C:/Users/flo/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.20/cores/arduino</Value>
-      <Value>C:/Users/flo/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.20/variants/standard</Value>
-      <Value>C:/Users/flo/AppData/Local/arduino15/packages/arduino/tools/avr-gcc/4.9.2-atmel3.5.4-arduino2/avr/include/</Value>
-      <Value>C:/Users/flo/AppData/Local/arduino15/packages/arduino/tools/avr-gcc/4.9.2-atmel3.5.4-arduino2/avr/include/avr/</Value>
-      <Value>C:/Users/flo/AppData/Local/arduino15/packages/arduino/tools/avr-gcc/4.9.2-atmel3.5.4-arduino2/lib/gcc/avr/4.8.1/include</Value>
-      <Value>C:/Users/flo/AppData/Local/arduino15/packages/arduino/tools/avr-gcc/4.9.2-atmel3.5.4-arduino2/lib/gcc/avr/4.9.2/include</Value>
-      <Value>C:/Users/flo/AppData/Local/arduino15/packages/arduino/tools/avr-gcc/4.9.2-atmel3.5.4-arduino2/lib/gcc/avr/4.9.3/include</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries/EEPROM/utility</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries/EEPROM</Value>
+      <Value>../../Youyue-858D-plus</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/arduino/avr/variants/standard</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/arduino/avr/cores/arduino</Value>
     </ListValues>
   </avrgcccpp.compiler.directories.IncludePaths>
   <avrgcccpp.compiler.optimization.level>Optimize (-O1)</avrgcccpp.compiler.optimization.level>
@@ -144,7 +144,7 @@
   <avrgcccpp.assembler.debugging.DebugLevel>Default (-Wa,-g)</avrgcccpp.assembler.debugging.DebugLevel>
 </AvrGccCpp>
     </ToolchainSettings>
-    <VMSETTING_IncludePaths>C:/Program Files (x86)/Arduino/hardware/arduino/avr/cores/arduino;C:/Program Files (x86)/Arduino/hardware/arduino/avr/variants/yun;../../youyue858d;C:/Program Files (x86)/Arduino/libraries;C:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries;C:/Program Files (x86)/Visual Micro/Visual Micro for Arduino/Micro Platforms/default/debuggers;C:/Users/mo/Documents/Arduino/libraries;C:/Program Files (x86)/Arduino/hardware/tools/avr/avr/include/;C:/Program Files (x86)/Arduino/hardware/tools/avr//avr/include/avr/;C:/Program Files (x86)/Arduino/hardware/tools/avr/lib/gcc/avr/4.8.1/include;../../Youyue-858D-plus;C:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries/EEPROM;C:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries/EEPROM/utility;C:/Program Files (x86)/Arduino/hardware/arduino/avr/variants/standard;../../../remote;C:/Users/flo/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.20/libraries/EEPROM/src;C:/Users/flo/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.20/libraries;C:/Users/flo/Documents/Arduino/libraries;C:/Users/flo/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.20/cores/arduino;C:/Users/flo/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.20/variants/standard;C:/Users/flo/AppData/Local/arduino15/packages/arduino/tools/avr-gcc/4.9.2-atmel3.5.4-arduino2/avr/include/;C:/Users/flo/AppData/Local/arduino15/packages/arduino/tools/avr-gcc/4.9.2-atmel3.5.4-arduino2/avr/include/avr/;C:/Users/flo/AppData/Local/arduino15/packages/arduino/tools/avr-gcc/4.9.2-atmel3.5.4-arduino2/lib/gcc/avr/4.8.1/include;C:/Users/flo/AppData/Local/arduino15/packages/arduino/tools/avr-gcc/4.9.2-atmel3.5.4-arduino2/lib/gcc/avr/4.9.2/include;C:/Users/flo/AppData/Local/arduino15/packages/arduino/tools/avr-gcc/4.9.2-atmel3.5.4-arduino2/lib/gcc/avr/4.9.3/include;</VMSETTING_IncludePaths>
+    <VMSETTING_IncludePaths>C:/Program Files (x86)/Arduino/hardware/arduino/avr/cores/arduino;C:/Program Files (x86)/Arduino/hardware/arduino/avr/variants/yun;../../youyue858d;C:/Program Files (x86)/Arduino/libraries;C:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries;C:/Program Files (x86)/Visual Micro/Visual Micro for Arduino/Micro Platforms/default/debuggers;C:/Users/mo/Documents/Arduino/libraries;C:/Program Files (x86)/Arduino/hardware/tools/avr/avr/include/;C:/Program Files (x86)/Arduino/hardware/tools/avr//avr/include/avr/;C:/Program Files (x86)/Arduino/hardware/tools/avr/lib/gcc/avr/4.8.1/include;../../Youyue-858D-plus;C:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries/EEPROM;C:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries/EEPROM/utility;C:/Program Files (x86)/Arduino/hardware/arduino/avr/variants/standard;</VMSETTING_IncludePaths>
     <VisualMicroSettings>
       <VisualMicroSettings>
         <arduino.board.name>lilypad_atmega328</arduino.board.name>
@@ -331,7 +331,7 @@ build.arch=AVR
     <ListValues>
       <Value>__AVR_ATmega328p__</Value>
       <Value>__AVR_ATmega328P__</Value>
-      <Value>ARDUINO=10608</Value>
+      <Value>ARDUINO=165</Value>
       <Value>ARDUINO_MAIN</Value>
       <Value>F_CPU=8000000L</Value>
       <Value>__AVR__</Value>
@@ -341,18 +341,18 @@ build.arch=AVR
   </avrgcc.compiler.symbols.DefSymbols>
   <avrgcc.compiler.directories.IncludePaths>
     <ListValues>
-      <Value>../../../remote</Value>
-      <Value>C:/Users/flo/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.20/libraries/EEPROM/src</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/tools/avr/lib/gcc/avr/4.8.1/include</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/tools/avr//avr/include/avr/</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/tools/avr/avr/include/</Value>
+      <Value>C:/Users/mo/Documents/Arduino/libraries</Value>
+      <Value>C:/Program Files (x86)/Visual Micro/Visual Micro for Arduino/Micro Platforms/default/debuggers</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries</Value>
       <Value>C:/Program Files (x86)/Arduino/libraries</Value>
-      <Value>C:/Users/flo/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.20/libraries</Value>
-      <Value>C:/Users/flo/Documents/Arduino/libraries</Value>
-      <Value>C:/Users/flo/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.20/cores/arduino</Value>
-      <Value>C:/Users/flo/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.20/variants/standard</Value>
-      <Value>C:/Users/flo/AppData/Local/arduino15/packages/arduino/tools/avr-gcc/4.9.2-atmel3.5.4-arduino2/avr/include/</Value>
-      <Value>C:/Users/flo/AppData/Local/arduino15/packages/arduino/tools/avr-gcc/4.9.2-atmel3.5.4-arduino2/avr/include/avr/</Value>
-      <Value>C:/Users/flo/AppData/Local/arduino15/packages/arduino/tools/avr-gcc/4.9.2-atmel3.5.4-arduino2/lib/gcc/avr/4.8.1/include</Value>
-      <Value>C:/Users/flo/AppData/Local/arduino15/packages/arduino/tools/avr-gcc/4.9.2-atmel3.5.4-arduino2/lib/gcc/avr/4.9.2/include</Value>
-      <Value>C:/Users/flo/AppData/Local/arduino15/packages/arduino/tools/avr-gcc/4.9.2-atmel3.5.4-arduino2/lib/gcc/avr/4.9.3/include</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries/EEPROM/utility</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries/EEPROM</Value>
+      <Value>../../Youyue-858D-plus</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/arduino/avr/variants/standard</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/arduino/avr/cores/arduino</Value>
     </ListValues>
   </avrgcc.compiler.directories.IncludePaths>
   <avrgcc.compiler.optimization.level>Optimize (-O1)</avrgcc.compiler.optimization.level>
@@ -366,7 +366,7 @@ build.arch=AVR
     <ListValues>
       <Value>__AVR_ATmega328p__</Value>
       <Value>__AVR_ATmega328P__</Value>
-      <Value>ARDUINO=10608</Value>
+      <Value>ARDUINO=165</Value>
       <Value>ARDUINO_MAIN</Value>
       <Value>F_CPU=8000000L</Value>
       <Value>__AVR__</Value>
@@ -376,18 +376,18 @@ build.arch=AVR
   </avrgcccpp.compiler.symbols.DefSymbols>
   <avrgcccpp.compiler.directories.IncludePaths>
     <ListValues>
-      <Value>../../../remote</Value>
-      <Value>C:/Users/flo/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.20/libraries/EEPROM/src</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/tools/avr/lib/gcc/avr/4.8.1/include</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/tools/avr//avr/include/avr/</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/tools/avr/avr/include/</Value>
+      <Value>C:/Users/mo/Documents/Arduino/libraries</Value>
+      <Value>C:/Program Files (x86)/Visual Micro/Visual Micro for Arduino/Micro Platforms/default/debuggers</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries</Value>
       <Value>C:/Program Files (x86)/Arduino/libraries</Value>
-      <Value>C:/Users/flo/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.20/libraries</Value>
-      <Value>C:/Users/flo/Documents/Arduino/libraries</Value>
-      <Value>C:/Users/flo/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.20/cores/arduino</Value>
-      <Value>C:/Users/flo/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.20/variants/standard</Value>
-      <Value>C:/Users/flo/AppData/Local/arduino15/packages/arduino/tools/avr-gcc/4.9.2-atmel3.5.4-arduino2/avr/include/</Value>
-      <Value>C:/Users/flo/AppData/Local/arduino15/packages/arduino/tools/avr-gcc/4.9.2-atmel3.5.4-arduino2/avr/include/avr/</Value>
-      <Value>C:/Users/flo/AppData/Local/arduino15/packages/arduino/tools/avr-gcc/4.9.2-atmel3.5.4-arduino2/lib/gcc/avr/4.8.1/include</Value>
-      <Value>C:/Users/flo/AppData/Local/arduino15/packages/arduino/tools/avr-gcc/4.9.2-atmel3.5.4-arduino2/lib/gcc/avr/4.9.2/include</Value>
-      <Value>C:/Users/flo/AppData/Local/arduino15/packages/arduino/tools/avr-gcc/4.9.2-atmel3.5.4-arduino2/lib/gcc/avr/4.9.3/include</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries/EEPROM/utility</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries/EEPROM</Value>
+      <Value>../../Youyue-858D-plus</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/arduino/avr/variants/standard</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/arduino/avr/cores/arduino</Value>
     </ListValues>
   </avrgcccpp.compiler.directories.IncludePaths>
   <avrgcccpp.compiler.optimization.level>Optimize (-O1)</avrgcccpp.compiler.optimization.level>
@@ -398,7 +398,7 @@ build.arch=AVR
   <avrgcccpp.assembler.debugging.DebugLevel>Default (-Wa,-g)</avrgcccpp.assembler.debugging.DebugLevel>
 </AvrGccCpp>
     </ToolchainSettings>
-    <VMSETTING_IncludePaths>C:/Program Files (x86)/Arduino/hardware/arduino/avr/cores/arduino;C:/Program Files (x86)/Arduino/hardware/arduino/avr/variants/yun;../../youyue858d;C:/Program Files (x86)/Arduino/libraries;C:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries;C:/Program Files (x86)/Visual Micro/Visual Micro for Arduino/Micro Platforms/default/debuggers;C:/Users/mo/Documents/Arduino/libraries;C:/Program Files (x86)/Arduino/hardware/tools/avr/avr/include/;C:/Program Files (x86)/Arduino/hardware/tools/avr//avr/include/avr/;C:/Program Files (x86)/Arduino/hardware/tools/avr/lib/gcc/avr/4.8.1/include;../../Youyue-858D-plus;C:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries/EEPROM;C:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries/EEPROM/utility;C:/Program Files (x86)/Arduino/hardware/arduino/avr/variants/standard;../../../remote;C:/Users/flo/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.20/libraries/EEPROM/src;C:/Users/flo/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.20/libraries;C:/Users/flo/Documents/Arduino/libraries;C:/Users/flo/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.20/cores/arduino;C:/Users/flo/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.20/variants/standard;C:/Users/flo/AppData/Local/arduino15/packages/arduino/tools/avr-gcc/4.9.2-atmel3.5.4-arduino2/avr/include/;C:/Users/flo/AppData/Local/arduino15/packages/arduino/tools/avr-gcc/4.9.2-atmel3.5.4-arduino2/avr/include/avr/;C:/Users/flo/AppData/Local/arduino15/packages/arduino/tools/avr-gcc/4.9.2-atmel3.5.4-arduino2/lib/gcc/avr/4.8.1/include;C:/Users/flo/AppData/Local/arduino15/packages/arduino/tools/avr-gcc/4.9.2-atmel3.5.4-arduino2/lib/gcc/avr/4.9.2/include;C:/Users/flo/AppData/Local/arduino15/packages/arduino/tools/avr-gcc/4.9.2-atmel3.5.4-arduino2/lib/gcc/avr/4.9.3/include;</VMSETTING_IncludePaths>
+    <VMSETTING_IncludePaths>C:/Program Files (x86)/Arduino/hardware/arduino/avr/cores/arduino;C:/Program Files (x86)/Arduino/hardware/arduino/avr/variants/yun;../../youyue858d;C:/Program Files (x86)/Arduino/libraries;C:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries;C:/Program Files (x86)/Visual Micro/Visual Micro for Arduino/Micro Platforms/default/debuggers;C:/Users/mo/Documents/Arduino/libraries;C:/Program Files (x86)/Arduino/hardware/tools/avr/avr/include/;C:/Program Files (x86)/Arduino/hardware/tools/avr//avr/include/avr/;C:/Program Files (x86)/Arduino/hardware/tools/avr/lib/gcc/avr/4.8.1/include;../../Youyue-858D-plus;C:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries/EEPROM;C:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries/EEPROM/utility;C:/Program Files (x86)/Arduino/hardware/arduino/avr/variants/standard;</VMSETTING_IncludePaths>
     <VisualMicroSettings>
       <VisualMicroSettings>
         <arduino.board.name>lilypad_atmega328</arduino.board.name>
@@ -584,13 +584,9 @@ build.arch=AVR
     <Compile Include="youyue858d.ino">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="__vm\.remote.vsarduino.h">
-      <SubType>compile</SubType>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Visual Micro\" />
-    <Folder Include="__vm\" />
   </ItemGroup>
   <Import Project="$(AVRSTUDIO_EXE_PATH)\\Vs\\Compiler.targets" />
 </Project>
